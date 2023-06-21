@@ -9,6 +9,7 @@
 Table of Contents
 =================
 * [What is this about?](#what-is-this-about)
+  + [Hot to use](#how-to-use)
   + [Preparation](#preparation)
   + [Raspberry PI project](#raspberry-pi-project)
 * [Grades](#grades)
