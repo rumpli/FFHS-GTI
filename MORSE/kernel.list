@@ -1,0 +1,393 @@
+
+build/output.elf:     file format elf32-littlearm
+
+
+Disassembly of section .init:
+
+00008000 <_start>:
+    8000:	ea000127 	b	84a4 <main>
+
+Disassembly of section .text:
+
+00008004 <LED_on>:
+    8004:	e92d4020 	push	{r5, lr}
+    8008:	e1a05000 	mov	r5, r0
+    800c:	e3a01001 	mov	r1, #1
+    8010:	eb000015 	bl	806c <SetGPIOFunction>
+    8014:	e1a00005 	mov	r0, r5
+    8018:	e59f1498 	ldr	r1, [pc, #1176]	; 84b8 <MainLoop+0x10>
+    801c:	e350001f 	cmp	r0, #31
+    8020:	82400020 	subhi	r0, r0, #32
+    8024:	82811004 	addhi	r1, r1, #4
+    8028:	e3a02001 	mov	r2, #1
+    802c:	e1a02012 	lsl	r2, r2, r0
+    8030:	e5812000 	str	r2, [r1]
+    8034:	e8bd8020 	pop	{r5, pc}
+
+00008038 <LED_off>:
+    8038:	e92d4020 	push	{r5, lr}
+    803c:	e1a05000 	mov	r5, r0
+    8040:	e3a01001 	mov	r1, #1
+    8044:	eb000008 	bl	806c <SetGPIOFunction>
+    8048:	e1a00005 	mov	r0, r5
+    804c:	e59f1468 	ldr	r1, [pc, #1128]	; 84bc <MainLoop+0x14>
+    8050:	e350001f 	cmp	r0, #31
+    8054:	82400020 	subhi	r0, r0, #32
+    8058:	82811004 	addhi	r1, r1, #4
+    805c:	e3a02001 	mov	r2, #1
+    8060:	e1a02012 	lsl	r2, r2, r0
+    8064:	e5812000 	str	r2, [r1]
+    8068:	e8bd8020 	pop	{r5, pc}
+
+0000806c <SetGPIOFunction>:
+    806c:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    8070:	e59f2448 	ldr	r2, [pc, #1096]	; 84c0 <MainLoop+0x18>
+
+00008074 <SetGPIOFunction_loop1>:
+    8074:	e3500009 	cmp	r0, #9
+    8078:	8240000a 	subhi	r0, r0, #10
+    807c:	82822004 	addhi	r2, r2, #4
+    8080:	8afffffb 	bhi	8074 <SetGPIOFunction_loop1>
+    8084:	e0800080 	add	r0, r0, r0, lsl #1
+    8088:	e1a01011 	lsl	r1, r1, r0
+    808c:	e3a03007 	mov	r3, #7
+    8090:	e1a03013 	lsl	r3, r3, r0
+    8094:	e1e03003 	mvn	r3, r3
+    8098:	e5924000 	ldr	r4, [r2]
+    809c:	e0044003 	and	r4, r4, r3
+    80a0:	e1811004 	orr	r1, r1, r4
+    80a4:	e5821000 	str	r1, [r2]
+    80a8:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+000080ac <wait>:
+    80ac:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    80b0:	e1a02000 	mov	r2, r0
+    80b4:	eb000005 	bl	80d0 <GetTimeStamp>
+    80b8:	e1a03000 	mov	r3, r0
+
+000080bc <wait_loop$>:
+    80bc:	eb000003 	bl	80d0 <GetTimeStamp>
+    80c0:	e0401003 	sub	r1, r0, r3
+    80c4:	e1510002 	cmp	r1, r2
+    80c8:	9afffffb 	bls	80bc <wait_loop$>
+    80cc:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+000080d0 <GetTimeStamp>:
+    80d0:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+    80d4:	e59f03e8 	ldr	r0, [pc, #1000]	; 84c4 <MainLoop+0x1c>
+    80d8:	e5900000 	ldr	r0, [r0]
+    80dc:	e49df004 	pop	{pc}		; (ldr pc, [sp], #4)
+
+000080e0 <dot>:
+    80e0:	e92d4020 	push	{r5, lr}
+    80e4:	e1a05000 	mov	r5, r0
+    80e8:	e3a00018 	mov	r0, #24
+    80ec:	ebffffc4 	bl	8004 <LED_on>
+    80f0:	e3a00805 	mov	r0, #327680	; 0x50000
+    80f4:	ebffffec 	bl	80ac <wait>
+    80f8:	e3a00018 	mov	r0, #24
+    80fc:	ebffffcd 	bl	8038 <LED_off>
+    8100:	e8bd8020 	pop	{r5, pc}
+
+00008104 <dash>:
+    8104:	e92d4020 	push	{r5, lr}
+    8108:	e3a00018 	mov	r0, #24
+    810c:	ebffffbc 	bl	8004 <LED_on>
+    8110:	e3a00601 	mov	r0, #1048576	; 0x100000
+    8114:	ebffffe4 	bl	80ac <wait>
+    8118:	e3a00018 	mov	r0, #24
+    811c:	ebffffc5 	bl	8038 <LED_off>
+    8120:	e8bd8020 	pop	{r5, pc}
+
+00008124 <space>:
+    8124:	e92d4020 	push	{r5, lr}
+    8128:	e3a00805 	mov	r0, #327680	; 0x50000
+    812c:	ebffffde 	bl	80ac <wait>
+    8130:	e8bd8020 	pop	{r5, pc}
+
+00008134 <letterspace>:
+    8134:	e92d4020 	push	{r5, lr}
+    8138:	e3a00601 	mov	r0, #1048576	; 0x100000
+    813c:	ebffffda 	bl	80ac <wait>
+    8140:	e8bd8020 	pop	{r5, pc}
+
+00008144 <A>:
+    8144:	e92d4020 	push	{r5, lr}
+    8148:	ebffffe4 	bl	80e0 <dot>
+    814c:	ebfffff4 	bl	8124 <space>
+    8150:	ebffffeb 	bl	8104 <dash>
+    8154:	ebfffff6 	bl	8134 <letterspace>
+    8158:	e8bd8020 	pop	{r5, pc}
+
+0000815c <B>:
+    815c:	e92d4020 	push	{r5, lr}
+    8160:	ebffffe7 	bl	8104 <dash>
+    8164:	ebffffee 	bl	8124 <space>
+    8168:	ebffffdc 	bl	80e0 <dot>
+    816c:	ebffffec 	bl	8124 <space>
+    8170:	ebffffda 	bl	80e0 <dot>
+    8174:	ebffffea 	bl	8124 <space>
+    8178:	ebffffd8 	bl	80e0 <dot>
+    817c:	ebffffec 	bl	8134 <letterspace>
+    8180:	e8bd8020 	pop	{r5, pc}
+
+00008184 <C>:
+    8184:	e92d4020 	push	{r5, lr}
+    8188:	ebffffdd 	bl	8104 <dash>
+    818c:	ebffffe4 	bl	8124 <space>
+    8190:	ebffffd2 	bl	80e0 <dot>
+    8194:	ebffffe2 	bl	8124 <space>
+    8198:	ebffffd9 	bl	8104 <dash>
+    819c:	ebffffe0 	bl	8124 <space>
+    81a0:	ebffffce 	bl	80e0 <dot>
+    81a4:	ebffffe2 	bl	8134 <letterspace>
+    81a8:	e8bd8020 	pop	{r5, pc}
+
+000081ac <D>:
+    81ac:	e92d4020 	push	{r5, lr}
+    81b0:	ebffffd3 	bl	8104 <dash>
+    81b4:	ebffffda 	bl	8124 <space>
+    81b8:	ebffffc8 	bl	80e0 <dot>
+    81bc:	ebffffd8 	bl	8124 <space>
+    81c0:	ebffffc6 	bl	80e0 <dot>
+    81c4:	ebffffda 	bl	8134 <letterspace>
+    81c8:	e8bd8020 	pop	{r5, pc}
+
+000081cc <E>:
+    81cc:	e92d4020 	push	{r5, lr}
+    81d0:	ebffffc2 	bl	80e0 <dot>
+    81d4:	ebffffd6 	bl	8134 <letterspace>
+    81d8:	e8bd8020 	pop	{r5, pc}
+
+000081dc <F>:
+    81dc:	e92d4020 	push	{r5, lr}
+    81e0:	ebffffbe 	bl	80e0 <dot>
+    81e4:	ebffffce 	bl	8124 <space>
+    81e8:	ebffffbc 	bl	80e0 <dot>
+    81ec:	ebffffcc 	bl	8124 <space>
+    81f0:	ebffffc3 	bl	8104 <dash>
+    81f4:	ebffffca 	bl	8124 <space>
+    81f8:	ebffffb8 	bl	80e0 <dot>
+    81fc:	ebffffcc 	bl	8134 <letterspace>
+    8200:	e8bd8020 	pop	{r5, pc}
+
+00008204 <G>:
+    8204:	e92d4020 	push	{r5, lr}
+    8208:	ebffffbd 	bl	8104 <dash>
+    820c:	ebffffc4 	bl	8124 <space>
+    8210:	ebffffbb 	bl	8104 <dash>
+    8214:	ebffffc2 	bl	8124 <space>
+    8218:	ebffffb0 	bl	80e0 <dot>
+    821c:	ebffffc4 	bl	8134 <letterspace>
+    8220:	e8bd8020 	pop	{r5, pc}
+
+00008224 <H>:
+    8224:	e92d4020 	push	{r5, lr}
+    8228:	ebffffac 	bl	80e0 <dot>
+    822c:	ebffffbc 	bl	8124 <space>
+    8230:	ebffffaa 	bl	80e0 <dot>
+    8234:	ebffffba 	bl	8124 <space>
+    8238:	ebffffa8 	bl	80e0 <dot>
+    823c:	ebffffb8 	bl	8124 <space>
+    8240:	ebffffa6 	bl	80e0 <dot>
+    8244:	ebffffba 	bl	8134 <letterspace>
+    8248:	e8bd8020 	pop	{r5, pc}
+
+0000824c <I>:
+    824c:	e92d4020 	push	{r5, lr}
+    8250:	ebffffa2 	bl	80e0 <dot>
+    8254:	ebffffb2 	bl	8124 <space>
+    8258:	ebffffa0 	bl	80e0 <dot>
+    825c:	ebffffb4 	bl	8134 <letterspace>
+    8260:	e8bd8020 	pop	{r5, pc}
+
+00008264 <J>:
+    8264:	e92d4020 	push	{r5, lr}
+    8268:	ebffff9c 	bl	80e0 <dot>
+    826c:	ebffffac 	bl	8124 <space>
+    8270:	ebffffa3 	bl	8104 <dash>
+    8274:	ebffffaa 	bl	8124 <space>
+    8278:	ebffffa1 	bl	8104 <dash>
+    827c:	ebffffa8 	bl	8124 <space>
+    8280:	ebffff9f 	bl	8104 <dash>
+    8284:	ebffffaa 	bl	8134 <letterspace>
+    8288:	e8bd8020 	pop	{r5, pc}
+
+0000828c <K>:
+    828c:	e92d4020 	push	{r5, lr}
+    8290:	ebffff9b 	bl	8104 <dash>
+    8294:	ebffffa2 	bl	8124 <space>
+    8298:	ebffff90 	bl	80e0 <dot>
+    829c:	ebffffa0 	bl	8124 <space>
+    82a0:	ebffff97 	bl	8104 <dash>
+    82a4:	ebffffa2 	bl	8134 <letterspace>
+    82a8:	e8bd8020 	pop	{r5, pc}
+
+000082ac <L>:
+    82ac:	e92d4020 	push	{r5, lr}
+    82b0:	ebffff8a 	bl	80e0 <dot>
+    82b4:	ebffff9a 	bl	8124 <space>
+    82b8:	ebffff91 	bl	8104 <dash>
+    82bc:	ebffff98 	bl	8124 <space>
+    82c0:	ebffff86 	bl	80e0 <dot>
+    82c4:	ebffff96 	bl	8124 <space>
+    82c8:	ebffff84 	bl	80e0 <dot>
+    82cc:	ebffff98 	bl	8134 <letterspace>
+    82d0:	e8bd8020 	pop	{r5, pc}
+
+000082d4 <M>:
+    82d4:	e92d4020 	push	{r5, lr}
+    82d8:	ebffff89 	bl	8104 <dash>
+    82dc:	ebffff90 	bl	8124 <space>
+    82e0:	ebffff87 	bl	8104 <dash>
+    82e4:	ebffff92 	bl	8134 <letterspace>
+    82e8:	e8bd8020 	pop	{r5, pc}
+
+000082ec <N>:
+    82ec:	e92d4020 	push	{r5, lr}
+    82f0:	ebffff83 	bl	8104 <dash>
+    82f4:	ebffff8a 	bl	8124 <space>
+    82f8:	ebffff78 	bl	80e0 <dot>
+    82fc:	ebffff8c 	bl	8134 <letterspace>
+    8300:	e8bd8020 	pop	{r5, pc}
+
+00008304 <O>:
+    8304:	e92d4020 	push	{r5, lr}
+    8308:	ebffff7d 	bl	8104 <dash>
+    830c:	ebffff84 	bl	8124 <space>
+    8310:	ebffff7b 	bl	8104 <dash>
+    8314:	ebffff82 	bl	8124 <space>
+    8318:	ebffff79 	bl	8104 <dash>
+    831c:	ebffff84 	bl	8134 <letterspace>
+    8320:	e8bd8020 	pop	{r5, pc}
+
+00008324 <P>:
+    8324:	e92d4020 	push	{r5, lr}
+    8328:	ebffff6c 	bl	80e0 <dot>
+    832c:	ebffff7c 	bl	8124 <space>
+    8330:	ebffff73 	bl	8104 <dash>
+    8334:	ebffff7a 	bl	8124 <space>
+    8338:	ebffff71 	bl	8104 <dash>
+    833c:	ebffff78 	bl	8124 <space>
+    8340:	ebffff66 	bl	80e0 <dot>
+    8344:	ebffff7a 	bl	8134 <letterspace>
+    8348:	e8bd8020 	pop	{r5, pc}
+
+0000834c <Q>:
+    834c:	e92d4020 	push	{r5, lr}
+    8350:	ebffff6b 	bl	8104 <dash>
+    8354:	ebffff72 	bl	8124 <space>
+    8358:	ebffff69 	bl	8104 <dash>
+    835c:	ebffff70 	bl	8124 <space>
+    8360:	ebffff5e 	bl	80e0 <dot>
+    8364:	ebffff6e 	bl	8124 <space>
+    8368:	ebffff65 	bl	8104 <dash>
+    836c:	ebffff70 	bl	8134 <letterspace>
+    8370:	e8bd8020 	pop	{r5, pc}
+
+00008374 <R>:
+    8374:	e92d4020 	push	{r5, lr}
+    8378:	ebffff58 	bl	80e0 <dot>
+    837c:	ebffff68 	bl	8124 <space>
+    8380:	ebffff5f 	bl	8104 <dash>
+    8384:	ebffff66 	bl	8124 <space>
+    8388:	ebffff54 	bl	80e0 <dot>
+    838c:	ebffff68 	bl	8134 <letterspace>
+    8390:	e8bd8020 	pop	{r5, pc}
+
+00008394 <S>:
+    8394:	e92d4020 	push	{r5, lr}
+    8398:	ebffff50 	bl	80e0 <dot>
+    839c:	ebffff60 	bl	8124 <space>
+    83a0:	ebffff4e 	bl	80e0 <dot>
+    83a4:	ebffff5e 	bl	8124 <space>
+    83a8:	ebffff4c 	bl	80e0 <dot>
+    83ac:	ebffff60 	bl	8134 <letterspace>
+    83b0:	e8bd8020 	pop	{r5, pc}
+
+000083b4 <T>:
+    83b4:	e92d4020 	push	{r5, lr}
+    83b8:	ebffff51 	bl	8104 <dash>
+    83bc:	ebffff5c 	bl	8134 <letterspace>
+    83c0:	e8bd8020 	pop	{r5, pc}
+
+000083c4 <U>:
+    83c4:	e92d4020 	push	{r5, lr}
+    83c8:	ebffff44 	bl	80e0 <dot>
+    83cc:	ebffff54 	bl	8124 <space>
+    83d0:	ebffff42 	bl	80e0 <dot>
+    83d4:	ebffff52 	bl	8124 <space>
+    83d8:	ebffff49 	bl	8104 <dash>
+    83dc:	ebffff54 	bl	8134 <letterspace>
+    83e0:	e8bd8020 	pop	{r5, pc}
+
+000083e4 <V>:
+    83e4:	e92d4020 	push	{r5, lr}
+    83e8:	ebffff3c 	bl	80e0 <dot>
+    83ec:	ebffff4c 	bl	8124 <space>
+    83f0:	ebffff3a 	bl	80e0 <dot>
+    83f4:	ebffff4a 	bl	8124 <space>
+    83f8:	ebffff38 	bl	80e0 <dot>
+    83fc:	ebffff48 	bl	8124 <space>
+    8400:	ebffff3f 	bl	8104 <dash>
+    8404:	ebffff4a 	bl	8134 <letterspace>
+    8408:	e8bd8020 	pop	{r5, pc}
+
+0000840c <W>:
+    840c:	e92d4020 	push	{r5, lr}
+    8410:	ebffff32 	bl	80e0 <dot>
+    8414:	ebffff42 	bl	8124 <space>
+    8418:	ebffff39 	bl	8104 <dash>
+    841c:	ebffff40 	bl	8124 <space>
+    8420:	ebffff37 	bl	8104 <dash>
+    8424:	ebffff42 	bl	8134 <letterspace>
+    8428:	e8bd8020 	pop	{r5, pc}
+
+0000842c <X>:
+    842c:	e92d4020 	push	{r5, lr}
+    8430:	ebffff33 	bl	8104 <dash>
+    8434:	ebffff3a 	bl	8124 <space>
+    8438:	ebffff28 	bl	80e0 <dot>
+    843c:	ebffff38 	bl	8124 <space>
+    8440:	ebffff26 	bl	80e0 <dot>
+    8444:	ebffff36 	bl	8124 <space>
+    8448:	ebffff2d 	bl	8104 <dash>
+    844c:	ebffff38 	bl	8134 <letterspace>
+    8450:	e8bd8020 	pop	{r5, pc}
+
+00008454 <Y>:
+    8454:	e92d4020 	push	{r5, lr}
+    8458:	ebffff29 	bl	8104 <dash>
+    845c:	ebffff30 	bl	8124 <space>
+    8460:	ebffff1e 	bl	80e0 <dot>
+    8464:	ebffff2e 	bl	8124 <space>
+    8468:	ebffff25 	bl	8104 <dash>
+    846c:	ebffff2c 	bl	8124 <space>
+    8470:	ebffff23 	bl	8104 <dash>
+    8474:	ebffff2e 	bl	8134 <letterspace>
+    8478:	e8bd8020 	pop	{r5, pc}
+
+0000847c <Z>:
+    847c:	e92d4020 	push	{r5, lr}
+    8480:	ebffff1f 	bl	8104 <dash>
+    8484:	ebffff26 	bl	8124 <space>
+    8488:	ebffff1d 	bl	8104 <dash>
+    848c:	ebffff24 	bl	8124 <space>
+    8490:	ebffff12 	bl	80e0 <dot>
+    8494:	ebffff22 	bl	8124 <space>
+    8498:	ebffff10 	bl	80e0 <dot>
+    849c:	ebffff24 	bl	8134 <letterspace>
+    84a0:	e8bd8020 	pop	{r5, pc}
+
+000084a4 <main>:
+    84a4:	e3a0d902 	mov	sp, #32768	; 0x8000
+
+000084a8 <MainLoop>:
+    84a8:	ebffffb9 	bl	8394 <S>
+    84ac:	ebffff94 	bl	8304 <O>
+    84b0:	ebffffb7 	bl	8394 <S>
+    84b4:	eafffffb 	b	84a8 <MainLoop>
+    84b8:	fe20001c 	.word	0xfe20001c
+    84bc:	fe200028 	.word	0xfe200028
+    84c0:	fe200000 	.word	0xfe200000
+    84c4:	fe003004 	.word	0xfe003004
